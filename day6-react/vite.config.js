@@ -1,7 +1,8 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  plugins: [react()],
-  base: '/Week3/day6-react/',
-})
+  plugins: [react(), tailwindcss()],
+  base: "/Week3/day6-react/",
+});
