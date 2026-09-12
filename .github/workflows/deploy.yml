@@ -1,0 +1,102 @@
+name: Deploy Week3 React Projects
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build Day 1
+        run: |
+          npm install --prefix day1-react
+          npm run build --prefix day1-react
+
+      - name: Build Day 2
+        run: |
+          npm install --prefix day2-react
+          npm run build --prefix day2-react
+
+      - name: Build Day 3
+        run: |
+          npm install --prefix day3-react
+          npm run build --prefix day3-react
+
+      - name: Build Day 4
+        run: |
+          npm install --prefix day4-react
+          npm run build --prefix day4-react
+
+      - name: Build Day 5
+        run: |
+          npm install --prefix day5-react
+          npm run build --prefix day5-react
+
+      - name: Build Day 6
+        run: |
+          npm install --prefix day6-react
+          npm run build --prefix day6-react
+
+      - name: Build Day 7
+        run: |
+          npm install --prefix day7-task-tracker
+          npm run build --prefix day7-task-tracker
+
+      - name: Prepare Website
+        run: |
+          mkdir -p _site/day1-react
+          mkdir -p _site/day2-react
+          mkdir -p _site/day3-react
+          mkdir -p _site/day4-react
+          mkdir -p _site/day5-react
+          mkdir -p _site/day6-react
+          mkdir -p _site/day7-task-tracker
+
+          cp -R day1-react/dist/. _site/day1-react/
+          cp -R day2-react/dist/. _site/day2-react/
+          cp -R day3-react/dist/. _site/day3-react/
+          cp -R day4-react/dist/. _site/day4-react/
+          cp -R day5-react/dist/. _site/day5-react/
+          cp -R day6-react/dist/. _site/day6-react/
+          cp -R day7-task-tracker/dist/. _site/day7-task-tracker/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
